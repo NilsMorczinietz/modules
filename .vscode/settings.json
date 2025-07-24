@@ -18,5 +18,26 @@
     "Modulverantwortlich",
     "Präsenzzeit",
     "tailwindcss"
-  ]
+  ],
+
+  // Enable formatting with Prettier on save
+  "editor.formatOnSave": true,
+  "[svelte]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+
+  // Enable ESLint auto-fix on save
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+
+  // Enable ESLint validation for specific languages
+  "eslint.validate": ["javascript", "typescript", "svelte"]
 }
