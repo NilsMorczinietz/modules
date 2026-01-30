@@ -5,7 +5,7 @@
   import type { ModuleView } from '$lib/types/module'
   import { X, Funnel, Search } from '@lucide/svelte'
   import type { Table } from '@tanstack/table-core'
-  import DataTableFilterOption from './modules-table-filter-option.svelte'
+  import FilterOption from '$lib/components/filter-option.svelte'
 
   let { table }: { table: Table<ModuleView> } = $props()
 
@@ -90,7 +90,7 @@
     </div>
     <div class="flex-1">
       <Input
-        placeholder="Suche nach Modulbezeichnung..."
+        placeholder="Suche nach Modulbezeichnung…"
         class="border-muted-foreground/20 focus-visible:border-primary focus-visible:ring-primary/20 h-10 w-full max-w-md border-2 text-sm transition-colors focus-visible:ring-2"
         type="search"
         value={table.getColumn('title')?.getFilterValue()?.toString() ?? ''}
@@ -108,28 +108,28 @@
     </div>
 
     <div class="flex flex-1 flex-nowrap items-center gap-2">
-      <DataTableFilterOption
+      <FilterOption
         filterValues={moduleFilter.selectedStudyPrograms}
         handleSelect={selectStudyProgram}
         title="Studiengang"
         options={moduleFilter.studyPrograms}
         clearFilters={clearStudyProgram}
       />
-      <DataTableFilterOption
+      <FilterOption
         filterValues={moduleFilter.selectedSemester}
         handleSelect={selectSemester}
         title="Semester"
         options={moduleFilter.semester}
         clearFilters={clearSemester}
       />
-      <DataTableFilterOption
+      <FilterOption
         filterValues={moduleFilter.selectedIdentities}
         handleSelect={selectModuleManagement}
         title="Modulverantwortliche"
         options={moduleFilter.identities}
         clearFilters={clearModuleManagement}
       />
-      <DataTableFilterOption
+      <FilterOption
         filterValues={moduleFilter.selectedModuleTypes}
         handleSelect={selectModuleType}
         title="Modulart"
