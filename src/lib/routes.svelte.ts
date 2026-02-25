@@ -9,6 +9,7 @@ import {
   Pencil,
   Search,
   Signature,
+  ClipboardPen,
   type IconProps
 } from '@lucide/svelte'
 import type { Component } from 'svelte'
@@ -39,6 +40,10 @@ function createRoutes() {
     '/exam-lists': {
       name: 'Prüfungslisten',
       icon: FileText
+    },
+    '/exam-types': {
+      name: 'Prüfungsformen',
+      icon: ClipboardPen
     }
   }
 
