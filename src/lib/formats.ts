@@ -1,4 +1,6 @@
+import { DateFormatter } from '@internationalized/date'
 import type { Identity, ModuleCore, ModuleManagement } from './types/core'
+import type { Semester } from './types/semester'
 import type { StudyProgram } from './types/study-program'
 
 export function ordinalKind(a: Identity): number {
@@ -84,5 +86,28 @@ export function creditsFormatter() {
   return new Intl.NumberFormat('de-DE', {
     minimumFractionDigits: 0,
     maximumFractionDigits: 1
+  })
+}
+
+export function fmtStudyProgramName(sp: StudyProgram): string {
+  if (sp.specialization) {
+    return `${sp.deLabel} ${sp.specialization.deLabel}`
+  }
+  return sp.deLabel
+}
+
+export function fmtDegree(sp: StudyProgram): string {
+  return sp.degree.deLabel
+}
+
+export function fmtSemester(semester: Semester): string {
+  return `${semester.deLabel} ${semester.year}`
+}
+
+export function getDateFormatter() {
+  return new DateFormatter('de-DE', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
   })
 }

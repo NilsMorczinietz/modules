@@ -1,8 +1,10 @@
 <script lang="ts">
   import { createSvelteTable, FlexRender } from '$lib/components/ui/data-table/index.js'
   import * as Table from '$lib/components/ui/table/index.js'
+  import { IsMobile } from '$lib/hooks/is-mobile.svelte'
   import type { ExamList } from '$lib/types/exam-list'
   import { type ColumnDef, getCoreRowModel } from '@tanstack/table-core'
+  import ExamListMobileCard from './exam-list-mobile-card.svelte'
 
   type DataTableProps = {
     columns: ColumnDef<ExamList>[]
@@ -11,8 +13,9 @@
 
   let { data, columns }: DataTableProps = $props()
 
+  const isMobile = new IsMobile()
+
   const table = createSvelteTable({
-    // data
     get data() {
       return data
     },
@@ -24,41 +27,55 @@
 </script>
 
 <div class="space-y-4">
-  <div class="rounded-md border">
-    <Table.Root>
-      <Table.Header>
-        {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
-          <Table.Row>
-            {#each headerGroup.headers as header (header.id)}
-              <Table.Head>
-                {#if !header.isPlaceholder}
-                  <FlexRender
-                    content={header.column.columnDef.header}
-                    context={header.getContext()}
-                  />
-                {/if}
-              </Table.Head>
-            {/each}
-          </Table.Row>
+  {#if isMobile.current}
+    <!-- Mobile view: Cards -->
+    {#if data.length > 0}
+      <div class="grid gap-3">
+        {#each data as examList (examList.url)}
+          <ExamListMobileCard {examList} />
         {/each}
-      </Table.Header>
-      <Table.Body>
-        {#each table.getRowModel().rows as row (row.id)}
-          <Table.Row data-state={row.getIsSelected() && 'selected'}>
-            {#each row.getVisibleCells() as cell (cell.id)}
-              <Table.Cell>
-                <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
-              </Table.Cell>
-            {/each}
-          </Table.Row>
-        {:else}
-          <Table.Row>
-            <Table.Cell colspan={columns.length} class="h-24 text-center"
-              >Keine Ergebnisse.</Table.Cell
-            >
-          </Table.Row>
-        {/each}
-      </Table.Body>
-    </Table.Root>
-  </div>
+      </div>
+    {:else}
+      <p class="text-muted-foreground text-center text-sm">Keine Ergebnisse.</p>
+    {/if}
+  {:else}
+    <!-- Desktop view: Table -->
+    <div class="rounded-md border">
+      <Table.Root>
+        <Table.Header>
+          {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
+            <Table.Row>
+              {#each headerGroup.headers as header (header.id)}
+                <Table.Head>
+                  {#if !header.isPlaceholder}
+                    <FlexRender
+                      content={header.column.columnDef.header}
+                      context={header.getContext()}
+                    />
+                  {/if}
+                </Table.Head>
+              {/each}
+            </Table.Row>
+          {/each}
+        </Table.Header>
+        <Table.Body>
+          {#each table.getRowModel().rows as row (row.id)}
+            <Table.Row data-state={row.getIsSelected() && 'selected'}>
+              {#each row.getVisibleCells() as cell (cell.id)}
+                <Table.Cell>
+                  <FlexRender content={cell.column.columnDef.cell} context={cell.getContext()} />
+                </Table.Cell>
+              {/each}
+            </Table.Row>
+          {:else}
+            <Table.Row>
+              <Table.Cell colspan={columns.length} class="h-24 text-center"
+                >Keine Ergebnisse.</Table.Cell
+              >
+            </Table.Row>
+          {/each}
+        </Table.Body>
+      </Table.Root>
+    </div>
+  {/if}
 </div>

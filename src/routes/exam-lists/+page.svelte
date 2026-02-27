@@ -1,32 +1,23 @@
 <script lang="ts" module>
+  import { fmtDegree, fmtSemester, fmtStudyProgramName, getDateFormatter } from '$lib/formats'
   import { renderComponent } from '$lib/components/ui/data-table'
   import type { ExamList } from '$lib/types/exam-list'
-  import { DateFormatter } from '@internationalized/date'
   import type { ColumnDef } from '@tanstack/table-core'
   import ExamListDownloadButton from './(components)/exam-list-download-button.svelte'
 
-  function fmtStudyProgram(studyProgram: StudyProgram) {
-    if (studyProgram.specialization) {
-      return `${studyProgram.deLabel} ${studyProgram.specialization.deLabel} (${studyProgram.degree.deLabel})`
-    }
-    return `${studyProgram.deLabel} (${studyProgram.degree.deLabel})`
-  }
+  const df = getDateFormatter()
 
-  function fmtSemester(semester: Semester) {
-    return `${semester.deLabel} ${semester.year}`
+  function fmtStudyProgramWithDegree(studyProgram: StudyProgram) {
+    const name = fmtStudyProgramName(studyProgram)
+    const degree = fmtDegree(studyProgram)
+    return `${name} (${degree})`
   }
-
-  const df = new DateFormatter('de-DE', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  })
 
   const columns: ColumnDef<ExamList>[] = [
     {
       accessorKey: 'title',
       header: 'Studiengang',
-      cell: ({ row }) => fmtStudyProgram(row.original.studyProgram)
+      cell: ({ row }) => fmtStudyProgramWithDegree(row.original.studyProgram)
     },
     {
       accessorKey: 'po',
